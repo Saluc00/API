@@ -1,0 +1,12 @@
+extends layout
+
+//- Block content ajouter au layout
+block content
+    .container
+        .card
+            ul.list-group.list-group-flush(style='width: 25rem;')
+                li.list-group-item #{users} users en base de donnée
+                li.list-group-item #{games} jeu en base de donnée
+                li.list-group-item #{runs} run en base de donnée
+//- <h1>hello test</h1>
+//- <h2>{{ id }} </h2>

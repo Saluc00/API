@@ -1,0 +1,77 @@
+extends layout
+
+//- Block content ajouter au layout
+block content
+    .container
+        .d-flex.justify-content-around.flex-row
+            .dropdown.d-block(style='width: 20rem;')
+                a#dropdownMenuLink.btn.btn-primary.dropdown-toggle(href='#', role='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
+                    | DELETE
+
+                .dropdown-menu
+                    form.px-4.py-3
+                        .form-group
+                        label(for='exampleDropdownFormEmail1') Email address
+                        input#exampleDropdownFormEmail1.form-control(type='email', placeholder='email@example.com')
+                        .form-group
+                        label(for='exampleDropdownFormPassword1') Password
+                        input#exampleDropdownFormPassword1.form-control(type='password', placeholder='Password')
+                        .form-group
+                        .form-check
+                            input#dropdownCheck.form-check-input(type='checkbox')
+                            label.form-check-label(for='dropdownCheck')
+                            | Remember me
+                        button.btn.btn-primary(type='submit') Sign in
+                    .dropdown-divider
+                    a.dropdown-item(href='#') New around here? Sign up
+                    a.dropdown-item(href='#') Forgot password?
+
+            .dropdown.d-block(style='width: 20rem;')
+                a#dropdownMenuLink.btn.btn-primary.dropdown-toggle(href='#', role='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
+                    | POST
+
+                .dropdown-menu
+                    form.px-4.py-3
+                        .form-group
+                        label(for='exampleDropdownFormEmail1') Email address
+                        input#exampleDropdownFormEmail1.form-control(type='email', placeholder='email@example.com')
+                        .form-group
+                        label(for='exampleDropdownFormPassword1') Password
+                        input#exampleDropdownFormPassword1.form-control(type='password', placeholder='Password')
+                        .form-group
+                        .form-check
+                            input#dropdownCheck.form-check-input(type='checkbox')
+                            label.form-check-label(for='dropdownCheck')
+                            | Remember me
+                        button.btn.btn-primary(type='submit') Sign in
+                    .dropdown-divider
+                    a.dropdown-item(href='#') New around here? Sign up
+                    a.dropdown-item(href='#') Forgot password?
+
+            .dropdown.d-block(style='width: 20rem;')
+                a#dropdownMenuLink.btn.btn-primary.dropdown-toggle(href='#', role='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
+                    | UPDATE
+
+                .dropdown-menu
+                    form.px-4.py-3
+                        .form-group
+                        label(for='exampleDropdownFormEmail1') Email address
+                        input#exampleDropdownFormEmail1.form-control(type='email', placeholder='email@example.com')
+                        .form-group
+                        label(for='exampleDropdownFormPassword1') Password
+                        input#exampleDropdownFormPassword1.form-control(type='password', placeholder='Password')
+                        .form-group
+                        .form-check
+                            input#dropdownCheck.form-check-input(type='checkbox')
+                            label.form-check-label(for='dropdownCheck')
+                            | Remember me
+                        button.btn.btn-primary(type='submit') Sign in
+                    .dropdown-divider
+                    a.dropdown-item(href='#') New around here? Sign up
+                    a.dropdown-item(href='#') Forgot password?
+
+        .card
+            ul.list-group.list-group-flush(style='width: 20rem;')
+                each val in all
+                    li.list-group-item #{Object.values(val)}
+            
