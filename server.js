@@ -4,6 +4,7 @@ const app = express()
 const Games = require('./controllers/game_controller')
 const Users = require('./controllers/user_controller')
 const Runs = require('./controllers/run_controller')
+const home_page = require('./controllers/home_controller')
 var bodyParser = require('body-parser')
 app.use(bodyParser.json()); // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
@@ -22,11 +23,7 @@ app.set('view engine', 'pug')
 // GET ===============
 
 // Home
-app.get('/', function (req, res) {
-    res.render('home', {
-
-    })
-})
+app.get('/', home_page)
 
 // User
 app.get('/users', Users.all_users)
@@ -48,11 +45,6 @@ app.post('/find/game', Games.find_games)
 app.get('/runs', Runs.all_runs)
 app.get('/run/:param1/:param2', Runs.search_runs)
 app.post('/test', Runs.find_runs)
-// app.get('/runs/:id', Runs.search_runs)
-// app.get('/runs/:rank', Runs.search_runs)
-// app.get('/runs/:plateform', Runs.search_runs)
-// app.get('/runs/:player', Runs.search_runs)
-// app.get('/runs/:game', Runs.search_runs)
 app.post('/del/run', Runs.delete_runs)
 app.post('/create/run', Runs.create_runs)
 app.post('/update/run', Runs.update_runs)
@@ -63,5 +55,8 @@ app.listen(3000, () => console.log('Serveur OK !'))
 // Error Handling
 app.use((req, res) => {
     res.status(404).render('404')
-    // res.status(501).send("Not Implemented, Sorry for that !")
+})
+
+app.use((req, res) => {
+    res.status(501).render('501')
 })

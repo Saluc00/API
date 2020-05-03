@@ -8,7 +8,7 @@ exports.all_games = (req, res) => {
             Games
                 .count()
                 .then(count => {
-                    res.render('games',{
+                    res.render('games', {
                         all_res: count,
                         title: 'Games',
                         all: games
@@ -23,10 +23,10 @@ exports.delete_games = (req, res) => {
         where: {
             name: req.body.name
         }
-    }).then( response => {
-            let id = response[0].dataValues.id // Stoque l'id du jeu
-            // Supprime tous les runs en relation avec le jeu
-            Runs
+    }).then(response => {
+        let id = response[0].dataValues.id // Stoque l'id du jeu
+        // Supprime tous les runs en relation avec le jeu
+        Runs
             .destroy({
                 where: {
                     fk_gameID: id
@@ -45,24 +45,28 @@ exports.delete_games = (req, res) => {
                     })
             })
 
-        })
+    })
 
-} 
+}
 
 exports.create_games = (req, res) => {
     let nameInsert = req.body.name
     Games
-        .create({ name: nameInsert })
+        .create({
+            name: nameInsert
+        })
         .then(games => {
             res.redirect('back');
         })
-} 
+}
 
 exports.update_games = (req, res) => {
     let nameInsert = req.body.name
     let newNameInsert = req.body.newname
     Games
-        .update({ name: newNameInsert}, {
+        .update({
+            name: newNameInsert
+        }, {
             where: {
                 name: nameInsert
             }
@@ -75,18 +79,31 @@ exports.update_games = (req, res) => {
 exports.find_games = (req, res) => {
     let nameFindOne = req.body.name
     Games.findAll({
-        where: {
-            name: nameFindOne
-        }
-    })
-    .then(result => {
-        let search = result[0].dataValues
-        res.redirect(`/game/${search.id}`);
-    })
-    .catch(() => {
-        res.status(404).render('404')
-    })
-} 
+            where: {
+                name: nameFindOne
+            }
+        })
+        .then(result => {
+            let search = result[0].dataValues
+            res.redirect(`/game/${search.id}`);
+        })
+        .catch(() => {
+            Games
+                .findAll()
+                .then(allGames => {
+                    Games
+                        .count()
+                        .then(count => {
+                            res.render('games', {
+                                error: 'Undiscovered..',
+                                all_res: count,
+                                title: 'Games',
+                                all: allGames
+                            })
+                        })
+                })
+        })
+}
 
 exports.search_games = (req, res) => {
     let idSearch = req.params.id
@@ -98,13 +115,18 @@ exports.search_games = (req, res) => {
         })
         .then(games => {
             Games
-                .count()
+                .count({
+                    where: {
+                        id: idSearch
+                    }
+                })
                 .then(count => {
-                    res.render('games',{
-                        all_res: 1,
+                    res.render('games', {
+                        all_res: count,
                         title: 'Games',
                         all: games
                     })
                 })
-    })
+
+        })
 }

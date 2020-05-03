@@ -89,7 +89,20 @@ exports.find_users = (req, res) => {
             res.redirect(`/user/${search.id}`);
         })
         .catch(() => {
-            res.status(404).render('404')
+            Users
+                .findAll()
+                .then(allUsers => {
+                    Users
+                        .count()
+                        .then(count => {
+                            res.render('users', {
+                                error: 'Undiscovered..',
+                                all_res: count,
+                                title: 'Users',
+                                all: allUsers
+                            })
+                        })
+                })
         })
 }
 
@@ -103,10 +116,14 @@ exports.search_users = (req, res) => {
         })
         .then(users => {
             Users
-                .count()
+                .count({
+                    where: {
+                        id: idSearch
+                    }
+                })
                 .then(count => {
                     res.render('users', {
-                        all_res: 1,
+                        all_res: count,
                         title: 'Users',
                         all: users
                     })

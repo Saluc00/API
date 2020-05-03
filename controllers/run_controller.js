@@ -182,11 +182,37 @@ exports.search_runs = (req, res) => {
                         id: search
                     }
                 })
+            requestCount = Runs
+                .count({
+                    include: [{
+                        model: Games,
+                        required: true
+                    }, {
+                        model: Users,
+                        required: true
+                    }],
+                    where: {
+                        id: search
+                    }
+                })
             break;
         }
         case "rank": {
             request = Runs
                 .findAll({
+                    include: [{
+                        model: Games,
+                        required: true
+                    }, {
+                        model: Users,
+                        required: true
+                    }],
+                    where: {
+                        rank: search
+                    }
+                })
+            requestCount = Runs
+                .count({
                     include: [{
                         model: Games,
                         required: true
@@ -214,11 +240,37 @@ exports.search_runs = (req, res) => {
                         plateform: search
                     }
                 })
+            requestCount = Runs
+                .count({
+                    include: [{
+                        model: Games,
+                        required: true
+                    }, {
+                        model: Users,
+                        required: true
+                    }],
+                    where: {
+                        plateform: search
+                    }
+                })
             break;
         }
         case "playerName": {
             request = Runs
                 .findAll({
+                    include: [{
+                        model: Games,
+                        required: true
+                    }, {
+                        model: Users,
+                        required: true,
+                        where: {
+                            name: search
+                        }
+                    }]
+                })
+            requestCount = Runs
+                .count({
                     include: [{
                         model: Games,
                         required: true
@@ -246,41 +298,57 @@ exports.search_runs = (req, res) => {
                         required: true
                     }]
                 })
+            requestCount = Runs
+                .count({
+                    include: [{
+                        model: Games,
+                        required: true,
+                        where: {
+                            name: search
+                        }
+                    }, {
+                        model: Users,
+                        required: true
+                    }]
+                })
             break;
         }
     }
     request
         .then(runs => {
-            if (runs[0] != undefined) {
-                res.render('runs', {
-                    title: 'Runs',
-                    all: runs
-                })
-            } else {
-                Runs
-                    .findAll({
-                        include: [{
-                            model: Games,
-                            required: true
-                        }, {
-                            model: Users,
-                            required: true
-                        }]
-                    })
-                    .then(allRuns => {
+            requestCount
+                .then(count => {
+                    if (runs[0] != undefined) {
+                        res.render('runs', {
+                            all_res: count,
+                            title: 'Runs',
+                            all: runs
+                        })
+                    } else {
                         Runs
-                            .count()
-                            .then(count => {
-                                res.render('runs', {
-                                    error: 'Undiscovered..',
-                                    all_res: count,
-                                    title: 'Runs',
-                                    all: allRuns
-                                })
+                            .findAll({
+                                include: [{
+                                    model: Games,
+                                    required: true
+                                }, {
+                                    model: Users,
+                                    required: true
+                                }]
                             })
-                    })
-            }
+                            .then(allRuns => {
+                                Runs
+                                    .count()
+                                    .then(count => {
+                                        res.render('runs', {
+                                            error: 'Undiscovered..',
+                                            all_res: count,
+                                            title: 'Runs',
+                                            all: allRuns
+                                        })
+                                    })
+                            })
+                    }
 
+                })
         })
-
 }

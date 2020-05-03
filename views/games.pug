@@ -3,6 +3,10 @@ extends layout
 //- Block content ajouter au layout
 block content
     .container
+        if error
+            .alert.alert-danger.m-2.p-2(role='alert')
+                | #{error}
+        
         .d-flex.flex-row.justify-content-between.m-2
 
             form.input-group.p-2(action="/find/game", method="POST")
