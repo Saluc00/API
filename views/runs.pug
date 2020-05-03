@@ -1,0 +1,85 @@
+extends layout
+
+//- Block content ajouter au layout
+block content
+    .container
+        if error
+            .alert.alert-danger.m-2.p-2(role='alert')
+                | #{error}
+
+        .d-flex.flex-row.justify-content-between.m-2
+
+            form.input-group.p-2(action="/test", method="POST")
+                input.form-control(name="name", type='text', placeholder="Find a Game", aria-label="Find a Game", aria-describedby='basic-addon2')
+                .input-group-append
+                    button.btn.btn-outline-secondary.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false') Search
+                    .dropdown-menu
+                        button.dropdown-item(name="type", type='submit', value="id") By ID
+                        button.dropdown-item(name="type", type='submit', value="rank") By Rank
+                        button.dropdown-item(name="type", type='submit', value="plateform") By Plateform
+                        button.dropdown-item(name="type", type='submit', value="playerName") By Player's Name
+                        button.dropdown-item(name="type", type='submit', value="gameName") By Game's Name
+
+            .dropdown.d-block.p-2
+                a#dropdownMenuLink.btn.btn-primary.dropdown-toggle(href='/test', role='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
+                    | DELETE
+
+                .dropdown-menu
+                    form.px-12.px-2(action="/del/run", method="POST")
+                        .form-group
+                        input.form-control.m-2(name="id", type='text', placeholder="Run\'s ID") 
+                        button.btn.btn-primary.m-2(type='submit') Delete
+
+            .dropdown.d-block.p-2
+                a#dropdownMenuLink.btn.btn-primary.dropdown-toggle(href='#', role='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
+                    | INSERT
+
+                .dropdown-menu
+                    form.px-12.px-2(action="/create/run", method="POST")
+                        .form-group
+                            input.form-control(name="rank", type='text', placeholder='Run\'s Rank')
+                            input.form-control(name="time", type='text', placeholder='Run\'s Time')
+                            input.form-control(name="verified", type='text', placeholder='Run\'s Verified')
+                            input.form-control(name="plateform", type='text', placeholder='Run\'s Plateform')
+                            input.form-control(name="date", type='text', placeholder='Run\'s Date')
+                            input.form-control(name="fk_playerID", type='text', placeholder='ID\'s User')
+                            input.form-control(name="fk_gameID", type='text', placeholder='ID\'s Game')
+                            button.btn.btn-primary.m-2(type='submit') Post
+
+            .dropdown.d-block.p-2
+                a#dropdownMenuLink.btn.btn-primary.dropdown-toggle(href='#', role='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
+                    | UPDATE
+
+                .dropdown-menu
+                    form.px-12.px-2(action="/update/run", method="POST")
+                        .form-group
+                            input.form-control(name="id", type='text', placeholder="Run\'s ID") 
+                            hr
+                            input.form-control(name="newRank", type='text', placeholder='New Run\'s Rank')
+                            input.form-control(name="newTime", type='text', placeholder='New Run\'s Time')
+                            input.form-control(name="newVerified", type='text', placeholder='New Run\'s Verified')
+                            input.form-control(name="newPlateform", type='text', placeholder='New Run\'s Plateform')
+                            input.form-control(name="newDate", type='text', placeholder='New Run\'s Date')
+                            input.form-control(name="newFk_playerID", type='text', placeholder='New ID\'s User')
+                            input.form-control(name="newFk_gameID", type='text', placeholder='New ID\'s Game')
+                            button.btn.btn-primary.m-2(type='submit') Update
+
+        if all_res                
+            .col-12
+                em #{all_res} total result 
+
+        #result
+            .d-flex.flex-wrap.m-2
+                each val in all
+                    .col-4.p-1
+                        li.list-group-item 
+                            | #{val.id}. | 
+                            b #{val.rank} 
+                            | - #{val.time} - #{val.verified} - (#{val.plateform}) - 
+                            em #{val.date}
+                            hr
+                            | Game:
+                            b  #{val.game.name}
+                            br
+                            | User:
+                            b  #{val.user.name}

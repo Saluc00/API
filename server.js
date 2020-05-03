@@ -1,103 +1,67 @@
 const express = require('express')
 const path = require('path')
 const app = express()
-const sqlite3 = require('sqlite3')
+const Games = require('./controllers/game_controller')
+const Users = require('./controllers/user_controller')
+const Runs = require('./controllers/run_controller')
+var bodyParser = require('body-parser')
+app.use(bodyParser.json()); // to support JSON-encoded bodies
+app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
+    extended: true
+}));
+
+app.use(express.json()); // to support JSON-encoded bodies
+app.use(express.urlencoded()); // to support URL-encoded bodies
 
 // Chargement du moteur de views
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'pug')
 
-// Connexion à la BDD    
-const db = new sqlite3.Database('run.db', (err) => {
-    if (err) {
-        console.log(error.message)
-    }
-    console.log('Connecté à la BDD')
-})
-
-// Fonction GET
-function get(route, request) {
-    app.get(route, (req, res) => {
-        let r = req.params.id ? request + ` where id = ${req.params.id}` : request
-        db.all(r, [], (err, rows) => {
-            if (rows.length === 0) {
-                res.send('Introuvable..')
-            } else {
-                console.log('--- ' + route + ' ---')
-                res.send({
-                    data: rows
-                })
-            }
-        });
-    })
-}
-
-// Fonction DELETE
-function del(route, request) {
-    app.get(route, (req, res) => {
-        console.log('--- ' + route + ' ---')
-        let r = req.params.id ? request + ` where id = ${req.params.id}` : request
-        db.run(r)
-        res.send('Supprimé !')
-    })
-}
 
 // =============== Toutes les routes ===============
 // GET ===============
 
-// User
-get('/users', `SELECT * FROM player`)
-get('/user/:id', `SELECT * FROM player`)
-// Game
-// get('/games', `SELECT * FROM game`)
-get('/game/:id', `SELECT * FROM game`)
-// Run
-get('/runs', `SELECT * FROM run`)
-get('/run/:id', `SELECT * FROM run`)
-
-// DELETE ===============
-del('/del/user/:id', `DELETE FROM player`)
-del('/del/run/:id', `DELETE FROM run`)
-del('/del/game/:id', `DELETE FROM game`)
-
-// Route pour faire des tests
+// Home
 app.get('/', function (req, res) {
-    let result = []
-    db.get('select count(id) from player', [], (err, row) => {
-        console.log(1, row)
-        result.push(row)
+    res.render('home', {
+
     })
-    db.get('select count(id) from game', [], (err, row) => {
-        console.log(2, row)
-        result.push(row)
-    })
-    db.get('select count(id) from run', [], (err, row) => {
-        console.log(3, row)
-        result.push(row)
-    })
-    setTimeout(() => console.log(4, result), 500)
-    setTimeout(() => res.render('home', {
-        users: Object.values(result[0]) /* Nombre des users */ ,
-        games: Object.values(result[1]) /* Nombre des games */ ,
-        runs: Object.values(result[2]) /* Nombre des runs */
-    }), 500)
 })
 
+// User
+app.get('/users', Users.all_users)
+app.get('/user/:id', Users.search_users)
+app.post('/del/user', Users.delete_users)
+app.post('/create/user', Users.create_users)
+app.post('/update/user', Users.update_users)
+app.post('/find/user', Users.find_users)
 
-app.get('/games', function (req, res) {
-    let test = []
-    db.all('select * from game', [], (err, rows) => {
-        if (rows.length === 0) {
-            res.send('Introuvable..')
-        } else {
-            console.log(rows)
-            res.render('games', {
-                all: rows
-            })
-        }
-    });
+// Game
+app.get('/games', Games.all_games)
+app.get('/game/:id', Games.search_games)
+app.post('/del/game', Games.delete_games)
+app.post('/create/game', Games.create_games)
+app.post('/update/game', Games.update_games)
+app.post('/find/game', Games.find_games)
 
-})
+// Run
+app.get('/runs', Runs.all_runs)
+app.get('/run/:param1/:param2', Runs.search_runs)
+app.post('/test', Runs.find_runs)
+// app.get('/runs/:id', Runs.search_runs)
+// app.get('/runs/:rank', Runs.search_runs)
+// app.get('/runs/:plateform', Runs.search_runs)
+// app.get('/runs/:player', Runs.search_runs)
+// app.get('/runs/:game', Runs.search_runs)
+app.post('/del/run', Runs.delete_runs)
+app.post('/create/run', Runs.create_runs)
+app.post('/update/run', Runs.update_runs)
 
 // Ecoute du serveur du le port 3000
 app.listen(3000, () => console.log('Serveur OK !'))
+
+// Error Handling
+app.use((req, res) => {
+    res.status(404).render('404')
+    // res.status(501).send("Not Implemented, Sorry for that !")
+})

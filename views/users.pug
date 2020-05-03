@@ -1,0 +1,57 @@
+extends layout
+
+//- Block content ajouter au layout
+block content
+    script.
+        console.log('oui');
+    .container
+        .d-flex.flex-row.justify-content-between.m-2
+
+            form.input-group.p-2(action="/find/user", method="POST")
+                input.form-control(name="name", type='text', placeholder="Find a User", aria-label="Find a User", aria-describedby='basic-addon2')
+                .input-group-append
+                    button.btn.btn-outline-secondary(type='submit') Search
+
+            .dropdown.d-block.p-2
+                a#dropdownMenuLink.btn.btn-primary.dropdown-toggle(href='/test', role='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
+                    | DELETE
+
+                .dropdown-menu
+                    form.px-12.px-2(action="/del/user", method="POST")
+                        .form-group
+                        input.form-contro.m-2(name="name", type='text', placeholder='User\'s Name') 
+                        button.btn.btn-primary.m-2(type='submit') Delete
+
+            .dropdown.d-block.p-2
+                a#dropdownMenuLink.btn.btn-primary.dropdown-toggle(href='#', role='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
+                    | INSERT
+
+                .dropdown-menu
+                    form.px-12.px-2(action="/create/user", method="POST")
+                        .form-group
+                        input.form-control.m-2(name="name", type='text', placeholder='User\'s Name')
+                        button.btn.btn-primary.m-2(type='submit') Post
+
+            .dropdown.d-block.p-2
+                a#dropdownMenuLink.btn.btn-primary.dropdown-toggle(href='#', role='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
+                    | UPDATE
+
+                .dropdown-menu
+                    form.px-12.px-2(action="/update/user", method="POST")
+                        .form-group
+                        input.form-control.m-2(name="name", type='text', placeholder='Game\'s Name')
+                        .form-group
+                        input.form-control.m-2(name="newName", type='text', placeholder='New Name')
+                        button.btn.btn-primary.m-2(type='submit') Update
+                        
+        .col-12
+            em #{all_res} total result 
+
+        #result
+            .d-flex.flex-wrap.m-2
+                each val in all
+                    .col-4.p-1
+                        li.list-group-item
+                            | #{val.id}. | 
+                            b #{val.name}
+
