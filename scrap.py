@@ -56,9 +56,9 @@ for div in soup:
     idGame = cursor.execute(
         'select id from games where name = "' + href + '"').fetchall()[0][0]
     for run in soup2:
-        p = run.find_all('td')
+        p = run.find_all('td')      
         rank, name, time, verified, plateform, date = getText(p[0]), getText(
-            p[1]), getText(p[2]), getText(p[3]), getText(p[4]), getText(p[5])
+            p[1]), getText(p[2]), getText(p[4]), getText(p[5]), getText(p[6])
         if name not in cursor.execute('select name from users').fetchall():
             cursor.execute('insert into users (name) values ("' + name + '")')
             conn.commit()
@@ -71,4 +71,6 @@ for div in soup:
                 'insert into runs (rank, time, verified, plateform, date, fk_playerID, fk_gameID) values ("' + str(rank) + '", "' + str(time) + '", "' + str(verified) + '", "' + str(plateform) + '", "' + str(date) + '", "' + str(idPlayer) + '", "' + str(idGame) + '")')
             conn.commit()
             All.append(Player(getText(p[0]), getText(p[1]), getText(
-                p[2]), getText(p[3]), getText(p[4]), getText(p[5])))
+                p[2]), getText(p[4]), getText(p[5]), getText(p[6])))
+
+print('====================== Script fini ======================')

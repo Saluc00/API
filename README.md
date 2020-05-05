@@ -38,7 +38,7 @@
 
 ### Diaporama
 
-[Lien de la présentation](https://www.canva.com/design/DAD7OUIQjrY/eH2-wRAmUWHzArVFK8PGOg/edit)
+[Lien de la présentation](https://www.canva.com/design/DAD7OUIQjrY/yXzsk2pSqqP_ej5L0y-lWw/view)
 
 ## Initialisation du projet
 
@@ -48,6 +48,7 @@
 
 - Node js
 - NPM
+- Sqlite3
 
 ## Installation du projet
 
